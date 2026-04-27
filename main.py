@@ -5,11 +5,9 @@ from todo_manager import read_todo_file, write_todo_file
 
 def main():
     try:
-        # Validación inicial de argumentos
         if len(sys.argv) < 2:
             raise IndexError("Insufficient arguments provided!")
 
-        # Manejo del comando --help
         if sys.argv[1] == "--help":
             print("""Usage: python main.py <file_path> <command> [arguments]...
 Commands:
@@ -22,13 +20,12 @@ Examples:
   python main.py tasks.txt view
   python main.py tasks.txt add "Call mom" remove "Take out trash" view""")
             return
-# El primer argumento es la ruta del archivo
+
         file_path = sys.argv[1]
         tasks = read_todo_file(file_path)
         
-        # Procesar comandos a partir del índice 2
         i = 2
-        modified = False # Para saber si debemos guardar el archivo al final
+        modified = False
 
         while i < len(sys.argv):
             command = sys.argv[i]
@@ -46,7 +43,7 @@ Examples:
                 tasks.append(new_task)
                 print(f'Task "{new_task}" added.')
                 modified = True
-                i += 2 # Saltar el comando y su argumento
+                i += 2
             elif command == "remove":
                 if i + 1 >= len(sys.argv):
                     raise IndexError('Task description required for "remove".')
@@ -57,11 +54,19 @@ Examples:
                     modified = True
                 else:
                     print(f'Task "{task_to_remove}" not found.')
-                i += 2 # Saltar el comando y su argumento
+                i += 2
 
             else:
                 raise ValueError("Command not found!")
 
-        # Escritura optimizada (una sola vez al final)
         if modified:
             write_todo_file(file_path, tasks)
+    except IndexError as e:
+        print(e)
+    except ValueError as e:
+        print(e)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
