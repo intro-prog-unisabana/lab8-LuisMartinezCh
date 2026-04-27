@@ -47,3 +47,21 @@ Examples:
                 print(f'Task "{new_task}" added.')
                 modified = True
                 i += 2 # Saltar el comando y su argumento
+            elif command == "remove":
+                if i + 1 >= len(sys.argv):
+                    raise IndexError('Task description required for "remove".')
+                task_to_remove = sys.argv[i+1]
+                if task_to_remove in tasks:
+                    tasks.remove(task_to_remove)
+                    print(f'Task "{task_to_remove}" removed.')
+                    modified = True
+                else:
+                    print(f'Task "{task_to_remove}" not found.')
+                i += 2 # Saltar el comando y su argumento
+
+            else:
+                raise ValueError("Command not found!")
+
+        # Escritura optimizada (una sola vez al final)
+        if modified:
+            write_todo_file(file_path, tasks)
